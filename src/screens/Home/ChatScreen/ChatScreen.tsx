@@ -8,12 +8,13 @@ import {Header} from '../../../components';
 import {IMessages} from '../../../types/MessagesTypes';
 import {NavigationProps, StackParamList} from '../../../types/NavigationTypes';
 import {Styles} from './styles';
+import {sendNotification} from '../../../utils/sendNotifications';
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState<IMessages[]>([]);
 
   const navigation = useNavigation<NavigationProps>();
-  const {userData, currentUserUid} =
+  const {userData, currentUserUid, currentUsername} =
     useRoute<RouteProp<StackParamList, 'ChatScreen'>>().params;
   const uniqueUid =
     currentUserUid! > userData.user_uid
@@ -110,6 +111,7 @@ const ChatScreen = () => {
       .doc(uniqueUid)
       .collection('messages')
       .add({...myMsg, createdAt: firestore?.FieldValue?.serverTimestamp()});
+    sendNotification(userData.fcmToken, currentUsername, msg.text);
   }, []);
 
   return (
@@ -140,12 +142,10 @@ const ChatScreen = () => {
                 wrapperStyle={{
                   right: {
                     backgroundColor: '#ab43f9',
-                    // width: '80%',
                     marginTop: 10,
                   },
                   left: {
                     backgroundColor: '#3a355a',
-                    // width: '80%',
                     marginTop: 10,
                   },
                 }}

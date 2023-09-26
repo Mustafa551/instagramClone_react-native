@@ -10,6 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from '../../../types/NavigationTypes';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Signupscreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,6 +52,7 @@ const Signupscreen = () => {
           email: user.user.email,
           profilePicture: await getRandomProfilePicture(),
           status: 'online',
+          fcmToken: await AsyncStorage.getItem('fcmToken'),
         });
       setLoading(false);
       navigation.replace('HomeStack', 'HomeScreen');
@@ -88,7 +90,8 @@ const Signupscreen = () => {
         <AppInput
           borderColor={
             formik.values.username.length < 1 ||
-            formik.values.username.length >= 3
+            (formik.values.username.length >= 4 &&
+              formik.values.username.length <= 30)
               ? 'rgba(0,0,0,0.4)'
               : 'red'
           }

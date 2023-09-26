@@ -4,4 +4,5 @@ export interface User {
   email: string;
   user_uid: string;
   status: string;
+  fcmToken: string;
 }

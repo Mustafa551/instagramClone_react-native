@@ -8,7 +8,7 @@ import {
   NotificationServices,
   requestUserPermission,
 } from './src/utils/pushNotifications';
-import {send} from './src/utils/sendNotifications';
+import {sendNotification} from './src/utils/sendNotifications';
 
 const App = () => {
   const appState = useRef(AppState.currentState);
@@ -55,7 +55,9 @@ const App = () => {
     SplashScreen.hide();
     requestUserPermission();
     NotificationServices();
-    send();
+    // sendNotification(
+    //   'fotQjS43QdiC9v7p0CtsYp:APA91bHw1ntkX_kXs4YYlDq48Oyrb7kUZqWU64u7IhuSvCC6uBn5EToM4y6TBA_zA0xwmmCwg6-GKB8V7-X82ZeD88NlkniG9RdOjoJV36AAscs5NGR-DeblddktVoxu8emWhlvEr2RF',
+    // );
   }, []);
 
   return <MyStack />;

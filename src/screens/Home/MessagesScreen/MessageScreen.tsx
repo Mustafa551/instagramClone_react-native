@@ -23,7 +23,7 @@ const MessageScreen: React.FC<IMessageScreenProp> = () => {
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [userss, setUserss] = useState<User[]>([]);
   const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
-  const [currentUid, setCurrentUid] = useState<string>();
+  const [currentUser, setCurrentUser] = useState<User>();
 
   const [search, setSearch] = useState<string>();
 
@@ -70,8 +70,8 @@ const MessageScreen: React.FC<IMessageScreenProp> = () => {
   };
 
   const getcurrentUser = () => {
-    const currentUserUid = auth().currentUser?.uid;
-    setCurrentUid(currentUserUid);
+    const currentUser: any = auth().currentUser;
+    setCurrentUser(currentUser);
   };
 
   const getallUser = () => {
@@ -198,7 +198,8 @@ const MessageScreen: React.FC<IMessageScreenProp> = () => {
                 onPress={() =>
                   navigation.navigate('ChatScreen', {
                     userData: item,
-                    currentUserUid: currentUid,
+                    currentUserUid: currentUser?.user_uid,
+                    currentUsername: currentUser?.username,
                   })
                 }
                 item={item}

@@ -11,18 +11,22 @@ import {NavigationProps} from '../../../types/NavigationTypes';
 import auth from '@react-native-firebase/auth';
 import {resetStack} from '../../../navigation/navigationRef';
 import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigation = useNavigation<NavigationProps>();
 
-  function onAuthStateChanged(user: any) {
+  async function onAuthStateChanged(user: any) {
     if (user) {
       firestore()
         .collection('users')
         .doc(auth().currentUser?.uid)
-        .update({status: 'online'});
+        .update({
+          status: 'online',
+          fcmToken: await AsyncStorage.getItem('fcmToken'),
+        });
       return resetStack('HomeStack', 'HomeScreen');
     } else {
       return;

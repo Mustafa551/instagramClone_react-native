@@ -10,10 +10,23 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 import {launchImageLibrary} from 'react-native-image-picker';
+import messaging from '@react-native-firebase/messaging';
+import {sendNotification} from '../../utils/sendNotifications';
 
 const uploadPostSchema = Yup.object().shape({
   caption: Yup.string().max(2200, 'Caption has reached the character limit'),
 });
+
+async function subscribeTopic() {
+  await messaging()
+    .subscribeToTopic('allUsers')
+    .then(() => {
+      console.log('Subscribed to the "allUsers" topic');
+    })
+    .catch(error => {
+      console.error('Error subscribing to the topic:', error);
+    });
+}
 
 const placeholder_img =
   'https://getstamped.co.uk/wp-content/uploads/WebsiteAssets/Placeholder.jpg';
@@ -83,6 +96,7 @@ const FormikPostUploader: React.FC = () => {
   }, []);
 
   const postPicture = (caption: string) => {
+    subscribeTopic();
     setLoading(true);
 
     const unsubscribe = firestore()
@@ -101,7 +115,7 @@ const FormikPostUploader: React.FC = () => {
       })
       .then(() => navigation.goBack());
     setLoading(false);
-
+    sendNotification('', currentLoggedInUser.username, 'new Post');
     return unsubscribe;
   };
 

@@ -32,6 +32,7 @@ export type StackParamList = {
   ChatScreen: {
     userData: User;
     currentUserUid?: string;
+    currentUsername?: string;
   };
 };
 
